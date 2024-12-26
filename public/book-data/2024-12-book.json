@@ -1,0 +1,26 @@
+{
+    "targetDate": "2024-12-01",
+    "booksInfo": [
+      {
+        "title": "The Great Gatsby",
+        "link": "https://example.com/the-great-gatsby",
+        "completionDate": "2023-05-01",
+        "review": "富と社会のテーマを探求するクラシックな小説です。",
+        "coverImage": "https://example.com/images/great-gatsby.jpg"
+      },
+      {
+        "title": "To Kill a Mockingbird",
+        "link": "https://example.com/to-kill-a-mockingbird",
+        "completionDate": "2023-06-15",
+        "review": "人種的不正義についての深く感動的な物語。",
+        "coverImage": "https://example.com/images/to-kill-a-mockingbird.jpg"
+      },
+      {
+        "title": "1984",
+        "link": "https://example.com/1984",
+        "completionDate": "2023-07-20",
+        "review": "全体主義の危険性について掘り下げたディストピア小説。",
+        "coverImage": "https://example.com/images/1984.jpg"
+      }
+    ]
+  }
