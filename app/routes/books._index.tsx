@@ -1,5 +1,6 @@
 import { findLatestMonthlyBookDate } from "@/domains/MonthlyBook/repository";
 import { redirect } from "@remix-run/node";
+import nodemailer from "nodemailer";
 
 export const loader = async () => {
   const latestMonthlyBookDate = await findLatestMonthlyBookDate();

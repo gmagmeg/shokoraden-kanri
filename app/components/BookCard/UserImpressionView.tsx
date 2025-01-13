@@ -14,6 +14,7 @@ type UserImpressionViewProps = {
   bookImpression?: UserBookImpression;
   handleImpressionChange?: HandleImpressionChange;
   isAuth: boolean;
+  isUpdating?: boolean;
 }
 
 const formatDate = (date: Date | undefined | null): string => {
@@ -28,7 +29,7 @@ const formatDate = (date: Date | undefined | null): string => {
   return `${year}-${month}-${day}`;
 };
 
-export const UserImpressionView = ({ entry, bookImpression, handleImpressionChange, isAuth }: UserImpressionViewProps) => {
+export const UserImpressionView = ({ entry, bookImpression, handleImpressionChange, isAuth, isUpdating }: UserImpressionViewProps) => {
   const [impression, setImpression] = useState(bookImpression?.impression ?? "");
   const [completionDate, setCompletionDate] = useState(formatDate(bookImpression?.completionDate));
 
@@ -41,55 +42,54 @@ export const UserImpressionView = ({ entry, bookImpression, handleImpressionChan
 
   const content = (
     <>
-      <div>
-        <h3 className="block text-lg font-medium mb-1 flex items-center gap-1">
-          <CalendarIcon />
-          読了日
-        </h3>
-        <div className="w-full md:w-2/3">
-          <Input
-            id="completion-date"
-            type="date"
-            value={isAuth ? completionDate : "YYYY-MM-DD"}
-            onChange={(e) => {
-              if (!isAuth) return;
-              setCompletionDate(e.target.value);
-              handleImpressionChange?.({
-                bookId: entry.bookId,
-                field: "completionDate",
-                value: e.target.value
-              });
-            }}
-          />
-        </div>
+      <div className="flex items-center gap-1">
+        <CalendarIcon />
+        <p>読了日</p>
+        {isUpdating && <span className="ml-2 text-gray-500">更新中...</span>}
       </div>
-      <div>
-        <h3 className="text-lg font-medium mb-1 flex items-center gap-1">
-          <PencilIcon />
-          感想欄
-        </h3>
-        <div className="w-full md:w-2/3 space-y-2">
-          <Textarea
+      <Input
+        id="completion-date"
+        type="date"
+        value={isAuth ? completionDate : "YYYY-MM-DD"}
+        onChange={(e) => {
+          if (!isAuth) return;
+          setCompletionDate(e.target.value);
+          handleImpressionChange?.({
+            bookId: entry.bookId,
+            field: "completionDate",
+            value: e.target.value
+          });
+        }}
+        disabled={isUpdating}
+      />
 
-            value={isAuth ? impression : ""}
-            onChange={(e) => isAuth && setImpression(e.target.value)}
-            onBlur={() => {
-              if (!isAuth) return;
-              handleImpressionChange?.({
-                bookId: entry.bookId,
-                field: "impression",
-                value: impression
-              });
-            }}
-            rows={6}
-          />
-          <XPostButton
-            title={entry.title}
-            impression={impression}
-            url={entry.link}
-            isDisabled={!isAuth || !impression}
-          />
-        </div>
+      <div className="flex items-center gap-1 mt-4">
+        <PencilIcon />
+        <p>感想欄</p>
+        {isUpdating && <span className="ml-2 text-gray-500">更新中...</span>}
+      </div>
+      <div className="w-full md:w-2/3 space-y-2">
+        <Textarea
+          value={isAuth ? impression : ""}
+          onChange={(e) => isAuth && setImpression(e.target.value)}
+          onBlur={() => {
+            if (!isAuth) return;
+            handleImpressionChange?.({
+              bookId: entry.bookId,
+              field: "impression",
+              value: impression
+            });
+          }}
+          rows={6}
+          disabled={isUpdating}
+        />
+        <XPostButton
+          title={entry.title}
+          impression={impression}
+          url={entry.link}
+          isDisabled={!isAuth || !impression}
+          isUpdating={isUpdating}
+        />
       </div>
     </>
   );

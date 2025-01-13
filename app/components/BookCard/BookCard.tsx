@@ -10,6 +10,7 @@ export type BookCardProps = {
   entry: BookEntry;
   userBooksImpression: UserBookImpression[];
   handleImpressionChange: HandleImpressionChange;
+  isUpdating?: boolean;
 }
 
 const getBookImpression = (bookId: number, userBooksImpression: UserBookImpression[]) => {
@@ -17,7 +18,7 @@ const getBookImpression = (bookId: number, userBooksImpression: UserBookImpressi
   );
 }
 
-export const BookCard = ({ entry, handleImpressionChange, userBooksImpression }: BookCardProps) => {
+export const BookCard = ({ entry, handleImpressionChange, userBooksImpression, isUpdating }: BookCardProps) => {
   const isAuth = useContext(AuthContext);
   const bookImpression = getBookImpression(entry.bookId, userBooksImpression);
 
@@ -50,6 +51,7 @@ export const BookCard = ({ entry, handleImpressionChange, userBooksImpression }:
           bookImpression={bookImpression}
           handleImpressionChange={handleImpressionChange}
           isAuth={isAuth}
+          isUpdating={isUpdating}
         />
       </div>
     </div>

@@ -3,6 +3,7 @@ import { registerUser } from "@/domains/User/repository";
 import { getLatestBooksURL, response } from "@/server/function";
 import { createUserSession } from "@/server/auth.server";
 import { commitSession, getSession } from "@/server/session.server";
+import { sendEmail } from "@/domains/Auth/function.server";
 
 // Action (データを保存する処理)
 export const action: ActionFunction = async ({ request }) => {
@@ -17,8 +18,22 @@ export const action: ActionFunction = async ({ request }) => {
 
   try {
     const userId = await registerUser({ name, email, password })
-    const session = await getSession(request.headers.get("Cookie"));
-    return await createUserSession(userId, getLatestBooksURL(), session);
+    await sendEmail(
+      email,
+      "登録が完了しました",
+      `${name}様
+
+  書庫らでん読書手帳へのご登録ありがとうございます。
+  アカウントの登録が完了したことをお知らせいたします。
+
+  ※ このメールは送信専用です。ご返信いただいてもお答えできません。
+  `);
+
+    return await createUserSession(
+      userId,
+      getLatestBooksURL(),
+      '/books'
+    );
   } catch (error) {
     console.error(error);
     const session = await getSession(request.headers.get("Cookie"));
@@ -32,7 +47,6 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export const loader = async () => {
-  // @todo 新規登録時のエラーメッセージ対応
   return response({})
 }
 

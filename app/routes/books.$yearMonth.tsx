@@ -79,16 +79,20 @@ export default function Book() {
 
   // ローカルの状態管理
   const [userBooksImpression, setUserBooksImpression] = useState<UserBookImpression[]>(initialImpressions);
+  const [isUpdating, setIsUpdating] = useState<number | null>(null);
 
   const handleImpressionChange: HandleImpressionChange = async ({ bookId, field, value }) => {
     const updatedImpressions = updateImpressions(userBooksImpression, bookId, field, value);
     setUserBooksImpression(updatedImpressions);
+    setIsUpdating(bookId);
 
     try {
       await sendImpressionUpdate(bookId, field, value);
     } catch (error) {
       setUserBooksImpression(userBooksImpression);
       console.error('Failed to update impression:', error);
+    } finally {
+      setIsUpdating(null);
     }
   };
 
@@ -105,6 +109,7 @@ export default function Book() {
                   entry={entry}
                   handleImpressionChange={handleImpressionChange}
                   userBooksImpression={userBooksImpression}
+                  isUpdating={isUpdating === entry.bookId}
                 />
               ))}
             </div>
