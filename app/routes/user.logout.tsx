@@ -3,7 +3,7 @@ import { logout } from "@/server/auth.server";
 import { getLatestBooksURL } from "@/server/function";
 
 export const action = async () => {
-  return logout();
+  return await logout();
 };
 
 export const loader = async () => {

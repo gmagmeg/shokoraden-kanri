@@ -7,6 +7,7 @@ import { ErrorMessage } from "@/routes/user.login"
 import { Input } from "@/components/ui/Input";
 import { CiUser } from "react-icons/ci";
 import { CiLogin } from "react-icons/ci";
+import { TabHeader } from "./TabHeader";
 
 type TabType = 'login' | 'register';
 
@@ -31,26 +32,10 @@ export const LoginModal: FC<{
           {/* Modal content */}
           <div className="relative bg-white">
             {/* Tab headers */}
-            <div className="flex border-b">
-              <button
-                className={`
-                  px-4 py-2 flex items-center gap-1
-                  ${activeTab === 'login' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'}
-                `}
-                onClick={() => setActiveTab('login')}
-              >
-                <CiLogin />ログイン
-              </button>
-              <button
-                className={`
-                  px-4 py-2 flex items-center gap-1
-                  ${activeTab === 'register' ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'}
-                `}
-                onClick={() => setActiveTab('register')}
-              >
-                <CiUser />新規登録
-              </button>
-            </div>
+            <TabHeader
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+            />
 
             {/* Modal body */}
             <div className="p-4 md:p-5 space-y-4">

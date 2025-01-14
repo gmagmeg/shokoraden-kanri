@@ -7,16 +7,24 @@ import { sendEmail } from "@/domains/Auth/function.server";
 
 // Action (データを保存する処理)
 export const action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData();
-  const name = String(formData.get("name") ?? '');
-  const email = String(formData.get("email") ?? '');
-  const password = String(formData.get("password") ?? '');
-
-  if (name === '' || email === '' || password === '') {
-    return { error: "入力が不正です" };
-  }
-
   try {
+    const formData = await request.formData();
+    const name = String(formData.get("name") ?? '');
+    const email = String(formData.get("email") ?? '');
+    const password = String(formData.get("password") ?? '');
+
+
+    if (name === '' || email === '' || password === '') {
+      const session = await getSession(request.headers.get("Cookie"));
+      session.flash("loginErrorMessage", "メールアドレスかパスワードが間違っています");
+
+      return await redirect('/user/login', {
+        headers: {
+          "Set-Cookie": await commitSession(session),
+        },
+      });
+    }
+
     const userId = await registerUser({ name, email, password })
     await sendEmail(
       email,
@@ -37,6 +45,7 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     console.error(error);
     const session = await getSession(request.headers.get("Cookie"));
+    // @ts-expect-error エラーが出るので無視
     session.flash("registerErrorMessage", error.message);
     return await redirect('/user/login', {
       headers: {

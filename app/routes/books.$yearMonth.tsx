@@ -5,7 +5,6 @@ import { HandleImpressionChange, UserBookImpression } from "@/domains/UserImpres
 import { getBookIdList } from "@/domains/MonthlyBook/book.server";
 import { response } from "@/server/function";
 import { getUserFromJWT } from "@/server/auth.server";
-import { AuthContext } from "@/domains/Auth/context";
 import { findBooksImpression } from "@/domains/UserImpression/repository";
 import { fetchMonthlyBookDates, findMonthlyBooks } from "@/domains/MonthlyBook/repository";
 import { useState } from "react";
@@ -97,25 +96,23 @@ export default function Book() {
   };
 
   return (
-    <AuthContext.Provider value={isAuth}>
-      <div className="container mx-auto px-4 pb-16">
-        <div className="flex flex-col lg:flex-row gap-8">
-          <SideMenu selectedMonthly={yearMonth} monthlyBooks={monthlyBooks} />
-          <div className="flex-1">
-            <div className="max-w-4xl space-y-8">
-              {monthlyBooks.map((entry) => (
-                <BookCard
-                  key={`monthly-book-${entry.bookId}`}
-                  entry={entry}
-                  handleImpressionChange={handleImpressionChange}
-                  userBooksImpression={userBooksImpression}
-                  isUpdating={isUpdating === entry.bookId}
-                />
-              ))}
-            </div>
+    <div className="container mx-auto px-4 pb-16">
+      <div className="flex flex-col lg:flex-row gap-8">
+        <SideMenu selectedMonthly={yearMonth} monthlyBooks={monthlyBooks} />
+        <div className="flex-1">
+          <div className="max-w-4xl space-y-8">
+            {monthlyBooks.map((entry) => (
+              <BookCard
+                key={`monthly-book-${entry.bookId}`}
+                entry={entry}
+                handleImpressionChange={handleImpressionChange}
+                userBooksImpression={userBooksImpression}
+                isUpdating={isUpdating === entry.bookId}
+              />
+            ))}
           </div>
         </div>
       </div>
-    </AuthContext.Provider>
+    </div>
   );
 }

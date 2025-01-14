@@ -12,7 +12,7 @@ export const LoginInput = ({ email, password, type }: {
   return (
     <>
       <div className="flex items-center gap-4 mb-4">
-        <label htmlFor="email" className="min-w-24 flex items-center gap-1">
+        <label htmlFor="email" className="min-w-28 flex items-center gap-1">
           <CiMail />
           メール
         </label>
@@ -20,13 +20,14 @@ export const LoginInput = ({ email, password, type }: {
           defaultValue={email}
           id={`email-${type}`}
           type="email"
-          placeholder="you@example.com"
+          placeholder="example@example.com"
           required
           name="email"
+          className="bg-white"
         />
       </div>
       <div className="flex items-center gap-4">
-        <label htmlFor="password" className="min-w-24 flex items-center gap-1">
+        <label htmlFor="password" className="min-w-28 flex items-center gap-1">
           <PiPasswordLight />
           パスワード
         </label>
@@ -36,8 +37,9 @@ export const LoginInput = ({ email, password, type }: {
           type="password"
           placeholder="xxx"
           required
-          name="email"
+          name="password"
           autoComplete="current-password"
+          className="bg-white"
         />
       </div>
     </>

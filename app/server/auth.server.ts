@@ -42,6 +42,8 @@ export const createUserSession = async (
     "SameSite=Lax",
   ].join("; ");
 
+  console.log("cookie::", cookie);
+
   return await redirect(redirectTo, {
     headers: {
       "Set-Cookie": cookie,

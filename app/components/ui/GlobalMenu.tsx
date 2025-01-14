@@ -6,6 +6,8 @@ import { LoginIcon } from "./icon/LoginIcon";
 import { PiNotebookFill } from "react-icons/pi";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoMdClose } from "react-icons/io";
+import { CiLogout } from "react-icons/ci";
+
 
 interface GlobalMenuProps {
   monthlyBookDates: string[];
@@ -42,22 +44,20 @@ export const GlobalMenu: React.FC<GlobalMenuProps> = ({ monthlyBookDates }) => {
             <MonthlyBookList monthlyBookDates={monthlyBookDates} />
           </div>
           <div className="mt-4 md:mt-0 md:ml-auto flex justify-center">
-            {isAuth ? (
-              <Form method="post" action="/user/logout">
-                <button type="submit" className="flex items-center gap-1 hover:text-gray-200">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-                  </svg>
-                  ログアウト
-                </button>
-              </Form>
-            ) : (
+            {!isAuth ? (
               <Link to="/user/login" className="flex items-center gap-1 hover:text-gray-200">
                 <button className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-md flex items-center gap-1">
                   <LoginIcon />
                   ログイン
                 </button>
               </Link>
+            ) : (
+              <Form method="post" action="/user/logout">
+                <button type="submit" className="flex items-center gap-1 hover:text-gray-200">
+                  <CiLogout />
+                  ログアウト
+                </button>
+              </Form>
             )}
           </div>
         </div>
