@@ -18,7 +18,7 @@ export const XPostButton: React.FC<XPostButtonProps> = ({
       href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${title}\n${impression}\n#書庫らでん\n`)}&url=${encodeURIComponent(url)}`}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#1DA1F2] rounded-lg hover:bg-[#1a8cd8] ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+      className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#3c7c71] rounded-lg hover:bg-[#3c7c71] ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
       onClick={(e) => {
         if (isDisabled) {
           e.preventDefault();

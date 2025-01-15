@@ -81,6 +81,19 @@ export default function Book() {
   const [isUpdating, setIsUpdating] = useState<number | null>(null);
 
   const handleImpressionChange: HandleImpressionChange = async ({ bookId, field, value }) => {
+    // 現在の値を取得
+    const currentImpression = userBooksImpression.find(
+      impression => Number(impression.bookId) === Number(bookId)
+    );
+
+    // 値が変更されていない場合は早期リターン
+    if (
+      currentImpression &&
+      currentImpression[field as keyof UserBookImpression] === value
+    ) {
+      return;
+    }
+
     const updatedImpressions = updateImpressions(userBooksImpression, bookId, field, value);
     setUserBooksImpression(updatedImpressions);
     setIsUpdating(bookId);

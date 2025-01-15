@@ -31,7 +31,7 @@ export const BookCard = ({ entry, handleImpressionChange, userBooksImpression, i
           className="object-cover w-auto h-auto rounded-lg shadow-lg w-2/3"
         />
       </div>
-      <div className="w-full md:flex-1 space-y-4">
+      <div className="w-full md:flex-1 space-y-2">
         <div className="flex items-center gap-2">
           <p><OpenBookIcon /></p>
           <h1 className="text-2xl">

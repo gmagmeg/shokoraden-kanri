@@ -19,7 +19,7 @@ export const GlobalMenu: React.FC<GlobalMenuProps> = ({ monthlyBookDates }) => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#1c5e4f] p-4 text-white">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#3c7c71] p-4 text-white">
         <div className="flex items-center justify-between">
           <Link to="/books">
             <h1 className="text-lg md:text-2xl font-bold pr-4 flex items-center gap-2">

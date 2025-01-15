@@ -72,7 +72,7 @@ export const UserImpressionView = ({ entry, bookImpression, handleImpressionChan
       </div>
       <div className="relative w-full md:w-48" ref={calendarRef}>
         <button
-          className="w-full px-3 py-2 text-sm border-b border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 transition-colors text-left"
+          className="w-full px-3 pb-2 text-sm border-b border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 transition-colors text-left"
           onClick={() => setIsCalendarOpen(!isCalendarOpen)}
           disabled={!isAuth || isUpdating}
         >
@@ -89,12 +89,17 @@ export const UserImpressionView = ({ entry, bookImpression, handleImpressionChan
         )}
       </div>
 
-      <div className="flex items-center gap-1 mt-4">
-        <PencilIcon />
-        <p>感想欄</p>
+      <div className="flex items-center gap-1">
+        <p className="flex mt-4"><PencilIcon /><span className="pl-1">感想欄</span></p>
+        <XPostButton
+          title={entry.title}
+          impression={impression}
+          url={entry.link}
+          isDisabled={!isAuth || !impression}
+        />
         {isUpdating && <span className="ml-2 text-gray-500">更新中...</span>}
       </div>
-      <div className="w-full md:w-2/3 space-y-2">
+      <div className="w-full md:w-2/3 space-y-2 mt-0">
         <Textarea
           value={isAuth ? impression : ""}
           onChange={(e) => isAuth && setImpression(e.target.value)}
@@ -109,12 +114,7 @@ export const UserImpressionView = ({ entry, bookImpression, handleImpressionChan
           rows={6}
           disabled={isUpdating}
         />
-        <XPostButton
-          title={entry.title}
-          impression={impression}
-          url={entry.link}
-          isDisabled={!isAuth || !impression}
-        />
+
       </div>
     </>
   );
