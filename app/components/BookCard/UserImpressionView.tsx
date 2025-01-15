@@ -1,8 +1,7 @@
-import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { BookEntry } from "@/domains/MonthlyBook/type";
 import { HandleImpressionChange, UserBookImpression } from "@/domains/UserImpression/type";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { CalendarIcon } from "@/components/ui/icon/CalendarIcon";
 import { PencilIcon } from "@/components/ui/icon/PencilIcon";
 import { XPostButton } from "@/components/ui/XPostButton";
@@ -10,6 +9,7 @@ import { Link } from "@remix-run/react";
 import { LoginIcon } from "@/components/ui/icon/LoginIcon";
 import Calendar, { CalendarProps } from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { useClickOutside } from "@/hooks/useClickOutside";
 
 type UserImpressionViewProps = {
   entry: BookEntry;
@@ -41,7 +41,7 @@ export const UserImpressionView = ({ entry, bookImpression, handleImpressionChan
   const [impression, setImpression] = useState(bookImpression?.impression ?? "");
   const [completionDate, setCompletionDate] = useState(formatDate(bookImpression?.completionDate));
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const calendarRef = useRef<HTMLDivElement>(null);
+  const calendarRef = useClickOutside(() => setIsCalendarOpen(false));
 
   useEffect(() => {
     if (isAuth) {
@@ -49,19 +49,6 @@ export const UserImpressionView = ({ entry, bookImpression, handleImpressionChan
       setCompletionDate(formatDate(bookImpression?.completionDate));
     }
   }, [bookImpression, isAuth]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
-        setIsCalendarOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
   const handleDateChange: CalendarProps['onChange'] = (value) => {
     if (value instanceof Date) {
@@ -85,7 +72,7 @@ export const UserImpressionView = ({ entry, bookImpression, handleImpressionChan
       </div>
       <div className="relative w-full md:w-48" ref={calendarRef}>
         <button
-          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-full px-3 py-2 text-sm border-b border-gray-600 disabled:cursor-not-allowed disabled:opacity-50 transition-colors text-left"
           onClick={() => setIsCalendarOpen(!isCalendarOpen)}
           disabled={!isAuth || isUpdating}
         >

@@ -1,6 +1,6 @@
-import { ActionFunction, ActionFunctionArgs, redirect, json } from "@remix-run/node";
+import { ActionFunction, redirect } from "@remix-run/node";
 import { getLatestBooksURL, response } from "@/server/function";
-import { authenticator, createUserSession, getUserFromJWT } from "@/server/auth.server";
+import { authenticator, createUserSession } from "@/server/auth.server";
 import { commitSession, getSession } from "@/server/session.server";
 import { LoginModal } from "@/components/LoginModal/LoginModal";
 import { AuthContext } from "@/domains/Auth/context";
