@@ -2,12 +2,14 @@ import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { BookEntry } from "@/domains/MonthlyBook/type";
 import { HandleImpressionChange, UserBookImpression } from "@/domains/UserImpression/type";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { CalendarIcon } from "@/components/ui/icon/CalendarIcon";
 import { PencilIcon } from "@/components/ui/icon/PencilIcon";
 import { XPostButton } from "@/components/ui/XPostButton";
 import { Link } from "@remix-run/react";
 import { LoginIcon } from "@/components/ui/icon/LoginIcon";
+import Calendar, { CalendarProps } from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 type UserImpressionViewProps = {
   entry: BookEntry;
@@ -29,9 +31,17 @@ const formatDate = (date: Date | undefined | null): string => {
   return `${year}-${month}-${day}`;
 };
 
+const formatDisplayDate = (date: string): string => {
+  if (!date) return "日付を選択";
+  const [year, month, day] = date.split("-");
+  return `${year}年${Number(month)}月${Number(day)}日`;
+};
+
 export const UserImpressionView = ({ entry, bookImpression, handleImpressionChange, isAuth, isUpdating }: UserImpressionViewProps) => {
   const [impression, setImpression] = useState(bookImpression?.impression ?? "");
   const [completionDate, setCompletionDate] = useState(formatDate(bookImpression?.completionDate));
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const calendarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isAuth) {
@@ -40,6 +50,32 @@ export const UserImpressionView = ({ entry, bookImpression, handleImpressionChan
     }
   }, [bookImpression, isAuth]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
+        setIsCalendarOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleDateChange: CalendarProps['onChange'] = (value) => {
+    if (value instanceof Date) {
+      const formattedDate = formatDate(value);
+      setCompletionDate(formattedDate);
+      setIsCalendarOpen(false);
+      handleImpressionChange?.({
+        bookId: entry.bookId,
+        field: "completionDate",
+        value: formattedDate
+      });
+    }
+  };
+
   const content = (
     <>
       <div className="flex items-center gap-1">
@@ -47,21 +83,24 @@ export const UserImpressionView = ({ entry, bookImpression, handleImpressionChan
         <p>読了日</p>
         {isUpdating && <span className="ml-2 text-gray-500">更新中...</span>}
       </div>
-      <Input
-        id="completion-date"
-        type="date"
-        value={isAuth ? completionDate : "YYYY-MM-DD"}
-        onChange={(e) => {
-          if (!isAuth) return;
-          setCompletionDate(e.target.value);
-          handleImpressionChange?.({
-            bookId: entry.bookId,
-            field: "completionDate",
-            value: e.target.value
-          });
-        }}
-        disabled={isUpdating}
-      />
+      <div className="relative w-full md:w-48" ref={calendarRef}>
+        <button
+          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-50"
+          onClick={() => setIsCalendarOpen(!isCalendarOpen)}
+          disabled={!isAuth || isUpdating}
+        >
+          {formatDisplayDate(completionDate)}
+        </button>
+        {isCalendarOpen && (
+          <div className="absolute z-50 mt-1">
+            <Calendar
+              onChange={handleDateChange}
+              value={completionDate ? new Date(completionDate) : null}
+              locale="ja-JP"
+            />
+          </div>
+        )}
+      </div>
 
       <div className="flex items-center gap-1 mt-4">
         <PencilIcon />
@@ -88,7 +127,6 @@ export const UserImpressionView = ({ entry, bookImpression, handleImpressionChan
           impression={impression}
           url={entry.link}
           isDisabled={!isAuth || !impression}
-          isUpdating={isUpdating}
         />
       </div>
     </>
