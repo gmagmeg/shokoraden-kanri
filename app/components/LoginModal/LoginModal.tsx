@@ -1,13 +1,14 @@
 import { SubmitButton } from "@/components/ui/SubmitButton";
 import { LoginInput } from "@/components/LoginModal/LoginInput";
 import { CancelButton } from "@/components/ui/CancelButton";
-import { Form } from "@remix-run/react";
+import { Form, useNavigation } from "@remix-run/react";
 import { FC, useState } from "react";
 import { ErrorMessage } from "@/routes/user.login"
 import { Input } from "@/components/ui/Input";
 import { CiUser } from "react-icons/ci";
 import { CiLogin } from "react-icons/ci";
 import { TabHeader } from "./TabHeader";
+import { LoadingSpinner } from "../ui/LoadingSpinner";
 
 type TabType = 'login' | 'register';
 
@@ -23,6 +24,8 @@ export const LoginModal: FC<{
   errorMessage,
 }) => {
     const [activeTab, setActiveTab] = useState<TabType>('login');
+    const navigation = useNavigation();
+    const isLoading = navigation.state === "submitting";
 
     return (
       <div
@@ -51,16 +54,15 @@ export const LoginModal: FC<{
                       email={email}
                       password={password}
                       type="login"
+                      disabled={isLoading}
                     />
-                    <div className="flex mt-4">
+                    <div className="flex mt-4 items-center gap-4">
                       <SubmitButton
-                        label="ログイン"
+                        label={isLoading ? "ログイン中..." : "ログイン"}
                         addClassName={"mr-4"}
+                        disabled={isLoading}
                       />
-                      <CancelButton
-                        label="キャンセル"
-                        onClick={() => { }}
-                      />
+                      {isLoading && <LoadingSpinner />}
                     </div>
                   </Form>
                 </>
@@ -89,22 +91,22 @@ export const LoginModal: FC<{
                         placeholder="アカウント名"
                         required
                         name="name"
+                        disabled={isLoading}
                       />
                     </div>
                     <LoginInput
                       email={email}
                       password={password}
                       type="register"
+                      disabled={isLoading}
                     />
-                    <div className="flex mt-4">
+                    <div className="flex mt-4 items-center gap-4">
                       <SubmitButton
-                        label="新規登録"
+                        label={isLoading ? "登録中..." : "新規登録"}
                         addClassName={"mr-8"}
+                        disabled={isLoading}
                       />
-                      <CancelButton
-                        label="キャンセル"
-                        onClick={() => { }}
-                      />
+                      {isLoading && <LoadingSpinner />}
                     </div>
                   </Form>
                 </>
@@ -113,5 +115,5 @@ export const LoginModal: FC<{
           </div>
         </div>
       </div>
-    )
-  }
+    );
+  };
