@@ -1,14 +1,15 @@
 import { Input } from "@/components/ui/Input"
 import { CiMail } from "react-icons/ci";
-
 import { PiPasswordLight } from "react-icons/pi";
 
+type LoginInputProps = {
+  email: string;
+  password: string;
+  type: "register" | "login";
+  disabled?: boolean;
+};
 
-export const LoginInput = ({ email, password, type }: {
-  email: string,
-  password: string,
-  type: "register" | "login",
-}) => {
+export const LoginInput = ({ email, password, type, disabled }: LoginInputProps) => {
   return (
     <>
       <div className="flex items-center gap-4 mb-4">
@@ -24,6 +25,7 @@ export const LoginInput = ({ email, password, type }: {
           required
           name="email"
           className="bg-white"
+          disabled={disabled}
         />
       </div>
       <div className="flex items-center gap-4">
@@ -40,8 +42,9 @@ export const LoginInput = ({ email, password, type }: {
           name="password"
           autoComplete="current-password"
           className="bg-white"
+          disabled={disabled}
         />
       </div>
     </>
-  )
-}
+  );
+};

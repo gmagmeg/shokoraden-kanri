@@ -55,18 +55,17 @@ export const loader = async ({ request }: { request: Request }) => {
 };
 
 export default function UserLogin() {
-  const response = useLoaderData<{
-    requestParams: { email: string, password: string } | null,
+  const { errorMessage } = useLoaderData<{
     errorMessage: ErrorMessage
   }>();
 
   return (
     <AuthContext.Provider value={false}>
       <LoginModal
-        email={response.requestParams?.email}
-        password={response.requestParams?.password}
+        email=""
+        password=""
         accountName=""
-        errorMessage={response.errorMessage}
+        errorMessage={errorMessage}
       />
     </AuthContext.Provider>
   );
