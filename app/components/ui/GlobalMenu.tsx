@@ -62,7 +62,7 @@ export const GlobalMenu: React.FC<GlobalMenuProps> = ({ monthlyBookDates }) => {
           </div>
         </div>
       </nav>
-      <div className="h-32 md:h-16"></div>
+      <div className="h-8 md:h-24"></div>
     </>
   );
 };

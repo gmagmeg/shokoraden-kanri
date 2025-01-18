@@ -23,22 +23,24 @@ export const BookCard = ({ entry, handleImpressionChange, userBooksImpression, i
   const bookImpression = getBookImpression(entry.bookId, userBooksImpression);
 
   return (
-    <div id={`book-${entry.bookId}`} className="flex flex-col md:flex-row gap-6 w-full" >
-      <div className="w-full md:w-[400px] aspect-[4/5] relative">
-        <img
-          src={`/book-data/${entry.coverImage}`}
-          alt={entry.title}
-          className="object-cover w-auto h-auto rounded-lg shadow-lg w-2/3"
-        />
+    <div id={`book-${entry.bookId}`} className="flex gap-4 md:gap-6 w-full" >
+      <div className="w-[160px] md:w-[400px] flex-shrink-0">
+        <div className="aspect-[4/5]">
+          <img
+            src={`/book-data/${entry.coverImage}`}
+            alt={entry.title}
+            className="object-contain w-full h-[200px] md:h-[600px] rounded-lg shadow-lg"
+          />
+        </div>
       </div>
-      <div className="w-full md:flex-1 space-y-2">
-        <div className="flex items-center gap-2">
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 mb-2">
           <p><OpenBookIcon /></p>
-          <h1 className="text-2xl">
+          <h1 className="text-xl md:text-2xl">
             <Link
               key={`link-${entry.bookId}`}
               to={entry.link}
-              className="flex items-center gap-2 font-medium mb-1 underline hover:text-gray-600"
+              className="flex items-center gap-2 font-medium underline hover:text-gray-600 line-clamp-2"
               target="_blank"
               rel="noreferrer"
             >
